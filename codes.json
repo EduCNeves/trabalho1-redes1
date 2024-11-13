@@ -1,0 +1,38 @@
+[
+    {
+        "code": "00000",
+        "description": "ACK"
+    },
+    {
+        "code": "00001",
+        "description": "NACK"
+    },
+    {
+        "code": "00010",
+        "description": "OK"
+    },
+    {
+        "code": "01101",
+        "description": "OK + CHECKSUM"
+    },
+    {
+        "code": "01110",
+        "description": "OK + TAM"
+    },
+    {
+        "code": "01111",
+        "description": "TAMANHO"
+    },
+    {
+        "code": "10000",
+        "description": "DADOS"
+    },
+    {
+        "code": "10001",
+        "description": "FIM DE DADOS"
+    },
+    {
+        "code": "11111",
+        "description": "ERRO"
+    }
+]
