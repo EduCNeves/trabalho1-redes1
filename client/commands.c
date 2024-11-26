@@ -30,7 +30,6 @@ CommandError backup(const char *file)
         return error;
     }
 
-    // Lógica de envio de pacotes seria implementada aqui
     // PacketQueue *send_queue = convert_command_to_packets(&cmd);
 
     // PacketQueue *response_queue = send_packet_queue(send_queue);

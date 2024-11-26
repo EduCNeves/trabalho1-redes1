@@ -1,8 +1,9 @@
 CC = gcc
 CFLAGS = -Wall -g
-SRC = client.c commands.c connection.c util.c
+SRC = main.c commands.c connection.c util.c packet.c
 OBJ = $(SRC:.c=.o)
 EXEC = cliente
+
 
 $(EXEC): $(OBJ)
 	$(CC) $(OBJ) -o $(EXEC)
