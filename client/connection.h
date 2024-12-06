@@ -7,7 +7,7 @@
 // Estrutura para um nó de pacote na fila
 typedef struct PacketNode
 {
-    Packet packet;
+    Packet *packet;
     struct PacketNode *next;
 } PacketNode;
 
@@ -17,6 +17,24 @@ typedef struct
     PacketNode *head;
     PacketNode *tail;
 } PacketQueue;
+
+// Variáveis globais para controle de conexão
+extern int sequence_number; // Número inicial de sequência
+extern int sock;
+
+/**
+ * @brief Inicializa a conexão, incluindo o socket e variáveis de controle globais.
+ *
+ * @param is_server Indica se o socket será usado como servidor (1 para servidor, 0 para cliente).
+ * @return int Descritor de socket (positivo em caso de sucesso) ou -1 em caso de erro.
+ *
+ * @note A função utiliza variáveis globais previamente definidas para controlar a conexão:
+ *       - `port` (porta do socket).
+ *       - `address` (endereço IP para cliente).
+ *       - `timeout` (tempo limite em segundos).
+ *       - `current_sequence_number` (inicializado como 0).
+ */
+int initialize_connection(int is_server);
 
 /**
  * @brief Converte um comando em uma fila de pacotes para envio.
