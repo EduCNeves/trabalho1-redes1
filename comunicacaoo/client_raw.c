@@ -76,7 +76,7 @@ void envia_pacote(int soquete, const char *nome_interface, Pacote *pacote)
     endereco.sll_halen = ETH_ALEN;
 
     // Envia o pacote
-    ssize_t enviado = sendto(soquete, pacote, sizeof(Pacote), 0, (struct sockaddr *)&endereco, sizeof(endereco));
+    ssize_t enviado = send(soquete, pacote, sizeof(Pacote), 0);
     if (enviado < 0)
     {
         perror("Erro ao enviar pacote");
