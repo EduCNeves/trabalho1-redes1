@@ -313,7 +313,7 @@ int send_packet(const Packet *packet, Packet *response)
     errno = 0;
     Packet *received_packet = receive_packet();
 
-    while (1)
+    while (running)
     {
         if (!received_packet)
         {
