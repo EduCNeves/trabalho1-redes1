@@ -81,4 +81,21 @@ void print_binary(uint8_t value);
  */
 long get_file_size(FILE *file_ptr);
 
+/**
+ * @brief Cria ou sobrescreve um arquivo no sistema de arquivos.
+ *
+ * @param filename nome do arquivo a ser criado.
+ * @return FILE* Ponteiro para o arquivo criado, ou NULL em caso de erro.
+ */
+FILE *create_file(const char *path);
+
+/**
+ * @brief Verifica se há espaço suficiente no disco para criar um arquivo.
+ *
+ * @param filename Nome do arquivo será criado.
+ * @param required_size Tamanho necessário em bytes.
+ * @return int Retorna 1 se houver espaço suficiente, 0 caso contrário.
+ */
+int has_sufficient_space(const char *filename, size_t required_size);
+
 #endif

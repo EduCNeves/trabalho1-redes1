@@ -636,3 +636,38 @@ uint8_t increment_sequence()
 {
     return (sequence_number++) & 0x1F; // Incrementa e aplica máscara para manter 5 bits
 }
+
+int sendError(uint8_t seq, const char *message)
+{
+    if (!message)
+    {
+        fprintf(stderr, "Erro: Mensagem de erro inválida.\n");
+        return -1;
+    }
+
+    // Verifica se a mensagem excede o tamanho máximo permitido
+    size_t message_length = strlen(message);
+    if (message_length > MAX_DATA_SIZE)
+    {
+        fprintf(stderr, "Erro: Mensagem de erro excede o tamanho máximo permitido.\n");
+        return -1;
+    }
+
+    // Cria o pacote de erro
+    Packet error_packet = {0};
+    create_packet(&error_packet, message_length, seq, MESSAGE_ERROR, (uint8_t *)message);
+
+    // Constrói o buffer para envio
+    uint8_t buffer[PACKET_SIZE_MAX];
+    size_t packet_size = build_packet(buffer, &error_packet);
+
+    // Envia o pacote
+    ssize_t bytes_sent = send(sock, buffer, packet_size, 0);
+    if (bytes_sent < 0)
+    {
+        perror("Erro ao enviar mensagem de erro");
+        return -1;
+    }
+
+    return 0; // Sucesso
+}

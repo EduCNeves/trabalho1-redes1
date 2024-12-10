@@ -22,6 +22,8 @@ CommandError backup(const char *file)
         return COMMAND_FILE_NOT_FOUND;
     }
 
+    // ENVIA COMMAND BACKUP
+
     Command cmd;
     CommandError error = convert_to_command(&cmd, COMMAND_BACKUP, file, NULL, 0, COMMAND);
     if (error != COMMAND_SUCCESS)
@@ -57,6 +59,8 @@ CommandError backup(const char *file)
     // Exibe a resposta do servidor
     if (response_cmd.type != MESSAGE_OK)
         return COMMAND_COMMUNICATION_ERROR;
+
+    // ENVIA SIZE
 
     long size = get_file_size(file_ptr);
     if (size < 0)
@@ -98,6 +102,8 @@ CommandError backup(const char *file)
     // Exibe a resposta do servidor
     if (response_cmd.type != MESSAGE_OK)
         return COMMAND_COMMUNICATION_ERROR;
+
+    // ENVIA FILE
 
     error = convert_to_command(&cmd, MESSAGE_DATA, NULL, file_ptr, 0, FILE_PTR);
     if (error != COMMAND_SUCCESS)

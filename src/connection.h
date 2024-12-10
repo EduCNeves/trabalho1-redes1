@@ -146,4 +146,12 @@ int send_ok(uint8_t seq);
  */
 uint8_t increment_sequence();
 
+/**
+ * @brief Envia uma mensagem de erro com uma string como dado.
+ *
+ * @param message A string com a mensagem de erro. O tamanho não pode exceder MAX_DATA_SIZE.
+ * @return int Retorna 0 em caso de sucesso, -1 em caso de falha.
+ */
+int sendError(uint8_t seq, const char *message);
+
 #endif

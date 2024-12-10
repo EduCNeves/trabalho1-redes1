@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <signal.h>
+#include <sys/statvfs.h>
 
 volatile int running = 1; // Inicializa a variável global
 
@@ -186,4 +187,57 @@ long get_file_size(FILE *file_ptr)
     rewind(file_ptr);
 
     return file_size; // Retorna o tamanho do arquivo
+}
+
+FILE *create_file(const char *filename)
+{
+    const char *path = get_full_path(filename);
+
+    if (!path)
+    {
+        fprintf(stderr, "Erro: Caminho do arquivo inválido.\n");
+        return NULL;
+    }
+
+    // Abre o arquivo no modo de escrita binária (cria ou sobrescreve)
+    FILE *file_ptr = fopen(path, "wb");
+    if (!file_ptr)
+    {
+        perror("Erro ao criar o arquivo");
+        return NULL;
+    }
+
+    return file_ptr;
+}
+
+int has_sufficient_space(const char *filename, size_t required_size)
+{
+    const char *path = get_full_path(filename);
+
+    if (!path)
+    {
+        fprintf(stderr, "Erro: Caminho inválido.\n");
+        return 0;
+    }
+
+    struct statvfs stat;
+    if (statvfs(path, &stat) != 0)
+    {
+        perror("Erro ao obter informações do sistema de arquivos");
+        return 0;
+    }
+
+    // Calcula o espaço livre em bytes
+    size_t available_space = stat.f_bavail * stat.f_frsize;
+
+    // Verifica se o espaço disponível é suficiente
+    if (available_space >= required_size)
+    {
+        return 1;
+    }
+    else
+    {
+        fprintf(stderr, "Espaço insuficiente: disponível %zu bytes, necessário %zu bytes.\n", available_space, required_size);
+        return 0;
+    }
 }

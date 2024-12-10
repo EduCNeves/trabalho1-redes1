@@ -137,7 +137,16 @@ int main()
 
             add_packet_to_queue(queue, &request);
             cmd = convert_packets_to_command(queue);
+            const char *filename = cmd.data.string_data;
             printf("Filename: %s\n", cmd.data.string_data);
+
+            FILE *f = create_file(filename);
+            if (!f)
+            {
+                while (sendError(request.seq, "não deu pra criar"))
+                    ;
+                continue;
+            }
 
             while (send_ok(request.seq))
                 ;
@@ -153,10 +162,8 @@ int main()
                         break;
                     }
                 }
+                r = receive_packet();
             }
-
-            while (send_ok(r->seq))
-                ;
 
             PacketQueue *queue_size = initialize_packet_queue();
             if (!queue_size)
@@ -168,7 +175,17 @@ int main()
             add_packet_to_queue(queue_size, r);
             cmd = convert_packets_to_command(queue_size);
 
+            if (!has_sufficient_space(cmd.data.string_data, cmd.data.long_data))
+            {
+                while (sendError(r->seq, "Não tem espaço"))
+                    ;
+                continue;
+            }
+
             printf("Mensagem de tamanho recebido. %ld\n", cmd.data.long_data);
+
+            while (send_ok(r->seq))
+                ;
 
             PacketQueue *queue_file = initialize_packet_queue();
             if (!queue_size)
@@ -176,6 +193,11 @@ int main()
                 fprintf(stderr, "Erro ao inicializar a fila de respostas.\n");
                 continue;
             }
+
+            queue_file = receive_data();
+            cmd = convert_packets_to_command(queue_file);
+
+            printf("Arquivo recebido. type: %d\n", cmd.type);
 
             break;
 
