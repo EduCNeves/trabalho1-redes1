@@ -10,16 +10,23 @@
 #define CLIENT_ADDRESS "127.0.0.1"
 
 // Interface de rede para o servidor (exemplo: eth0)
-#define SERVER_INTERFACE "eth0"
+#define SERVER_INTERFACE "wlp3s0"
 
 // Interface de rede para o cliente (exemplo: wlan0)
-#define CLIENT_INTERFACE "wlan0"
+#define CLIENT_INTERFACE "wlp3s0"
 
 // Timeout padrão em segundos para operações de socket
 #define SOCKET_TIMEOUT 5
 
 // Tempo limite para operações de socket (em segundos)
 // Defina como 0 para desativar o timeout
-#define TIMEOUT 5
+#define TIMEOUT 2
+
+#define MAX_CONSECUTIVE_TIMEOUTS 5
+
+// Define o diretório padrão para operações de backup
+#define BACKUP_DIR "backup/"
+
+#define MAX_RETRIES 100
 
 #endif // CONFIG_H

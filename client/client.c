@@ -17,7 +17,8 @@ int main()
         printf("2. Restore\n");
         printf("3. Check\n");
         printf("4. List files in backup directory\n");
-        printf("5. Exit\n");
+        printf("5. List files in Server\n");
+        printf("6. Exit\n");
         printf("Escolha sua tarefa 1-5): ");
 
         if (scanf("%d", &choice) != 1)
@@ -69,10 +70,14 @@ int main()
             break;
 
         case 4: // List files
-            list_files();
+            printf("%s", list_files());
             break;
 
-        case 5: // Exit
+        case 5:
+            list_server_files();
+            break;
+
+        case 6: // Exit
             printf("Saindo do programa...\n");
             return 0;
 

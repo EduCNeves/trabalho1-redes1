@@ -24,7 +24,11 @@ typedef enum
     // Códigos de comando
     COMMAND_BACKUP = 0b10100,
     COMMAND_RESTORE = 0b10101,
-    COMMAND_CHECK = 0b10110
+    COMMAND_CHECK = 0b10110,
+
+    COMMAND_LIST_FILES = 0b10111,
+    MESSAGE_LIST_FILES = 0b11001,
+    MESSAGE_TEST = 0b11000
 } MessageType;
 
 /**
@@ -35,8 +39,9 @@ typedef enum
  */
 typedef enum
 {
-    STRING,
-    FILE_PTR
+    COMMAND,
+    FILE_PTR,
+    SIZE
 } DataType;
 
 /**
@@ -52,7 +57,10 @@ typedef enum
     COMMAND_SUCCESS,
     COMMAND_FILE_NOT_FOUND,
     COMMAND_INVALID_INPUT,
-    COMMAND_MEMORY_ERROR
+    COMMAND_MEMORY_ERROR,
+    COMMAND_COMMUNICATION_ERROR,
+    COMMAND_SERVER_ERROR,
+    COMMAND_INVALID_RESPONSE
 } CommandError;
 
 /**
@@ -70,6 +78,7 @@ typedef struct
     {
         char *string_data;
         FILE *file_data;
+        long long_data;
     } data;
 } Command;
 
@@ -111,9 +120,33 @@ void handle_command_error(CommandError error_code);
  * @param type Tipo da mensagem ou comando, representado pelo enum MessageType (ex.: COMMAND_BACKUP, COMMAND_RESTORE).
  * @param string_data Dado do tipo string (ou NULL se não for usado).
  * @param file_data Ponteiro para FILE (ou NULL se não for usado).
+ * @param long_data Dados em long int (ou NULL se não for usado).
  * @param data_type Tipo de dado, especificando se o conteúdo é uma string ou um arquivo (STRING ou FILE_PTR).
  * @return CommandError Código de erro indicando o resultado da operação.
  */
-CommandError convert_to_command(Command *cmd, MessageType type, const char *string_data, FILE *file_data, DataType data_type);
+CommandError convert_to_command(Command *cmd, MessageType type, const char *string_data, FILE *file_data, long long_data, DataType data_type);
+
+/**
+ * @brief Solicita a lista de arquivos do servidor e exibe as informações.
+ *
+ * Envia um comando ao servidor para listar os arquivos no diretório de backup.
+ * A resposta do servidor é exibida no formato de uma tabela com o nome e a data
+ * de modificação dos arquivos.
+ *
+ * @return CommandError Código de erro indicando o resultado da operação.
+ *         - COMMAND_SUCCESS: Operação concluída com sucesso.
+ *         - COMMAND_MEMORY_ERROR: Falha na alocação de memória.
+ *         - COMMAND_COMMUNICATION_ERROR: Erro na comunicação com o servidor.
+ *         - COMMAND_SERVER_ERROR: O servidor retornou uma resposta de erro.
+ *         - COMMAND_INVALID_RESPONSE: Resposta do servidor inválida ou inesperada.
+ */
+CommandError list_server_files();
+
+/**
+ * @brief Testa a conexão com o servidor enviando um comando simples.
+ *
+ * @return CommandError Código de erro indicando o resultado da operação.
+ */
+CommandError test_connection();
 
 #endif

@@ -5,10 +5,11 @@
 #include <stddef.h>
 
 // Definição de constantes
-#define MAX_DATA_SIZE 63 // Tamanho máximo dos dados no pacote (em bytes)
-#define PACKET_SIZE 12   // Tamanho total do pacote (em bytes)
+#define MAX_DATA_SIZE 63   // Tamanho máximo dos dados no pacote (em bytes)
+#define PACKET_SIZE_MIN 46 // Tamanho minimo do pacote (em bytes)
+#define PACKET_SIZE_MAX 67 // Tamanho minimo do pacote (em bytes)
 
-#define PACKET_START_MARKER 0b10101010
+#define PACKET_START_MARKER 0b01111110
 
 // Definição de mascaras
 #define MASK_TAM 0b00111111      // Para isolar os 6 bits mais baixos (Tam)
@@ -42,7 +43,7 @@ uint8_t calculate_crc(const uint8_t *data, size_t length);
  * @param buffer Buffer onde o pacote será armazenado (deve ter pelo menos PACKET_SIZE bytes).
  * @param packet Estrutura Packet com os dados a serem compactados.
  */
-void build_packet(uint8_t *buffer, const Packet *packet);
+size_t build_packet(uint8_t *buffer, const Packet *packet);
 
 /**
  * @brief Decodifica um buffer em uma estrutura Packet.

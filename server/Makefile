@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 SRC_DIR = ../src
 BUILD_DIR = ../build
-TARGET = cliente
+TARGET = servidor
 
 # Diretórios de fontes
 COMMANDS_DIR = $(SRC_DIR)/commands
