@@ -175,7 +175,7 @@ int main()
             add_packet_to_queue(queue_size, r);
             cmd = convert_packets_to_command(queue_size);
 
-            if (!has_sufficient_space(cmd.data.string_data, cmd.data.long_data))
+            if (!has_sufficient_space(filename, cmd.data.long_data))
             {
                 while (sendError(r->seq, "Não tem espaço"))
                     ;

@@ -84,6 +84,17 @@ int initialize_connection(int is_server)
         return -1;
     }
 
+    struct packet_mreq mr = {0};
+    mr.mr_ifindex = ifr.ifr_ifindex;
+    mr.mr_type = PACKET_MR_PROMISC;
+    if (setsockopt(sock, SOL_PACKET, PACKET_ADD_MEMBERSHIP, &mr, sizeof(mr)) < 0)
+    {
+
+        perror("Erro ao fazer PACKET_MR_PROMISC no socket raw");
+        close(sock);
+        return -1;
+    }
+
     if (is_server)
         printf("Servidor iniciado na interface %s\n", interface);
     else
